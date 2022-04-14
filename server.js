@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const headers = require('./headers');
 const handleSuccess = require('./handleSuccess');
 const handleError = require('./handleError');
-const posts = require('./model/posts');
+const Posts = require('./model/Posts');
 
 dotenv.config({path: './config.env'});
 const DB = process.env.DATABASE.replace(
@@ -21,7 +21,7 @@ const requestListener = async (req, res) => {
     body += chunk;
   })
   if (req.url === '/posts' && req.method === 'GET') {
-    const allPosts = await posts.find();
+    const allPosts = await Posts.find();
     handleSuccess(res, allPosts);
     res.end();
   } else if (req.url === '/posts' && req.method === 'POST') {
@@ -29,7 +29,7 @@ const requestListener = async (req, res) => {
       try {
         const data = JSON.parse(body);
         if (data.content) {
-          const newPost = await posts.create({
+          const newPost = await Posts.create({
             name: data.name,
             content: data.content,
             tags: data.tags,
